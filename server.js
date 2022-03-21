@@ -1,17 +1,17 @@
 //mongodb
-require('./config/db')
+require('./config/db');
 
-const app = require ('express')();
+const app = require('express');
 const port = process.env.PORT || 3000;
 
-const UserRouter = require('../routes/User');
+const UserRouter = require('./Route/UserRoute');
 
-// aceitar post vindo da data
+// aceitar post form data
 const bodyParser = require('express').json;
 app.use(bodyParser());
 
-app.use('/user', UserRouter)
+app.use('/user', User)
 
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+    console.log(`server running on port ${port}`);
 })
