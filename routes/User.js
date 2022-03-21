@@ -2,11 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 //mongodb usuario model
-const user = require('./../models/User');
+const User = require('./../models/User');
 
 // Senha Handler
 const bcrypt = require('bcrypt');
-const User = require('./../models/User');
 
 // cadastro
 router.post('/signup', (req, res) => {
@@ -31,7 +30,7 @@ router.post('/signup', (req, res) => {
             status: "FAILED",
             message: "invalid email entered"
         })
-    }else if (!new data(dateOfBirth).getTime()) {
+    }else if (!new Date(dateOfBirth).getTime()) {
         res.json({
             status: "Failed",
             message: "Invalid date of birth entered"
@@ -105,7 +104,7 @@ router.post('/signin', (req, res) => {
             message: "Empry credentials supplied"
         })
     } else {
-        //checar se usario exist
+        //checar se usario existe
         user.find({email})
         .then(data => {
             if(data.length) {
