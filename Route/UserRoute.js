@@ -25,7 +25,7 @@ const path = require("path");
 
 // nodemailer 
 let transporter = nodemailer.createTransport({
-    service: "gmail",
+    service: "hotmail",
     auth: {
         user: process.env.AUTH_EMAIL,
         pass: process.env.AUTH_PASS,
@@ -38,7 +38,7 @@ transporter.verify((error, success) => {
         console.group(error);
     } else {
         console.log("Ready for messages");
-        console.log("success");
+        console.log(success);
     }
 })
 
@@ -96,15 +96,12 @@ router.post('/signup', (req, res) => {
                         name,
                         email,
                         password: hashedPassword,
-                        dateOfBirth
+                        dateOfBirth,
+                        verified: false,
                     });
 
                     newUser.save().then(result => {
-                        res.json({
-                            status: "Success",
-                            message:"Signup successful",
-                            data: result,
-                        })
+                        sendVerificationEmail(result, res);
                     })
                     .catch(err => {
                         res.json({
@@ -214,7 +211,7 @@ router.get("/verify/:userId/:uniqueString",(req, res) => {
           if (expiresAt < Date.now()) {
             // tempo expirado entao nos o deletamos
            UserVerification
-           .deleteOne({ userId })
+           .deleteOne({ userId})
            .then(result => {
                User.deleteOne({_id: userId })
                .then(() => {
@@ -300,7 +297,7 @@ router.post('/signin', (req, res) => {
         })
     } else {
         // checar se usuario existe
-        User.find({email})
+        User.find({ email })
         .then(data => {
             if (data.length) {
                 //usuario existe
