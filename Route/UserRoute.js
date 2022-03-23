@@ -26,22 +26,22 @@ router.post('/signup', (req, res) => {
         res.json({
             status: "FAILED",
             message: "Invalid name entered"
-        });
+        })
     } else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
         res.json({
             status: "FAILED",
             message: "Invalid email entered"
-        });
+        })
     } else if (!new Date(dateOfBirth).getTime()) {
         res.json({
             status: "FAILED",
             message: "Invalid date of birth entered"
-        });
+        })
     } else if (password.length <8) {
         res.json({
             status: "FAILED",
             message: "Password is too short!"
-        });
+        })
     } else {
         //checar se email ja existe
         User.find({email}).then(result => {
