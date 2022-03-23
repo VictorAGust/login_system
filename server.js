@@ -3,16 +3,17 @@ require('./config/db');
 
 
 const app = require('express')();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
+
+//cors
+const cors = require("cors");
+app.use(cors());
 
 const UserRouter = require('./Route/UserRoute');
 
 // aceitar post form data
 const bodyParser = require('express').json;
 app.use(bodyParser());
-
-const cors = require("cors");
-app.use(cors());
 
 
 app.use('/user', UserRouter)
