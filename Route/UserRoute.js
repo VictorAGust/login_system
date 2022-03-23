@@ -1,14 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
+
 //mongodb user model
 const User = require('./../models/UserModels')
 
 //lidando com senha
-const bcrypt =require('bcrypt');
+const bcrypt = require('bcrypt');
 
 //cadastrar
-router.post ('signup', (req, res) => {
+
+router.post('/signup', (req, res) => {
     let {name, email, password, dateOfBirth} = req.body;
     name = name.trim();
     email = email.trim();
@@ -24,33 +26,43 @@ router.post ('signup', (req, res) => {
         res.json({
             status: "FAILED",
             message: "Invalid name entered"
-        })
-    } else if (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+        });
+    } else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
         res.json({
             status: "FAILED",
             message: "Invalid email entered"
-        })
+        });
     } else if (!new Date(dateOfBirth).getTime()) {
         res.json({
             status: "FAILED",
             message: "Invalid date of birth entered"
-        })
+        });
     } else if (password.length <8) {
         res.json({
             status: "FAILED",
             message: "Password is too short!"
-        })
+        });
     } else {
-        //checar se usuario ja existe
+        //checar se email ja existe
         User.find({email}).then(result => {
             if (result.length){
                 //usuario ja existe
                 res.json({
                     status:"FAILED",
                     message:"User with the provided email already exists"
-                })
+                });
             } else {
                 // tentar criar novo usuario
+                
+               // module.exports.addUser = function (newUser, callback) {
+                   // bcrypt.genSalt(10, (salt) => {
+                      //  bcrypt.hash(newUser.passowrd, salt, (err, hash) => {
+                      //      if (err) throw err;
+                      //      newUser.passowrd = hash;
+                      //      newUser.save(callback);
+                   //     });
+                 //   });
+               // }
 
                 // lindando com password
                 const saltRounds = 10;
@@ -64,7 +76,7 @@ router.post ('signup', (req, res) => {
 
                     newUser.save().then(result => {
                         res.json({
-                            status: "Sucess",
+                            status: "Success",
                             message:"Signup successful",
                             data: result,
                         })
